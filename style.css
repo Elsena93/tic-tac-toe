@@ -1,0 +1,40 @@
+:root {
+
+}
+
+body {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+
+    width: 256px;
+    height: 256px;
+}
+
+.row {
+
+}
+
+.column {
+    flex: 1;
+
+    height: 64px;
+    width: 64px;
+    margin: 4px;
+    margin-right: 0px;
+    background-color: grey;
+
+    border: 2px;
+    border-style: solid;
+    border-color: black;
+}
+
+.column:hover {
+    border-color: red;
+}
