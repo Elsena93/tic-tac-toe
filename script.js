@@ -7,6 +7,8 @@ const Board = (() => {
                     ['1,0', '1,1', '1,2'],
                     ['2,0', '2,1', '2,2']];
 
+    let emptyCounter = 9;
+
     const getBoardValue = (a, b) => boardValue[a][b];
 
     const assignBoardValue = (a, b, playerSymbol) => boardValue[a][b] = playerSymbol;
@@ -33,6 +35,15 @@ const Board = (() => {
             element.innerText = '';
         });
     };
+
+
+    // Tracking how many empty boxes left
+    const subtractCounter = () => {
+        emptyCounter -= 1;
+    }
+    const resetCounter = () => {
+        emptyCounter = 9;
+    }
 
     // Check each winning combination horizontal, diagonal, vertical
     const checkWin = function (player) {
@@ -70,6 +81,8 @@ const Board = (() => {
             console.log(`${player.getName()} Win!`);
             Game.removeBoxesListener(); //Disable all boxes
 
+        } else if (emptyCounter === 0) {
+            console.log('It is a draw');
         }
     }
     
@@ -77,6 +90,7 @@ const Board = (() => {
         getBoardValue,
         assignBoardValue, resetBoardValue,
         assignBoardDisplay, resetBoardDisplay,
+        subtractCounter, resetCounter, emptyCounter,
         checkWin,
     };
 }
@@ -110,13 +124,13 @@ const Game = (() => {
             console.log('first player Start!');
             currentTurn = playerOne;
             updateTurnSign(currentTurn);
-            resetButton.innerText = 'RESET';
         } else {
             console.log('RESET: first player Start!');
             currentTurn = playerOne;
             turnSign.innerHTML = playerOne.getName();
             Board.resetBoardValue();
             Board.resetBoardDisplay();
+            Board.resetCounter();
             addBoxesListener();
         };
     };
@@ -154,6 +168,7 @@ const Game = (() => {
             currentTurn = playerOne;
             Board.assignBoardValue(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.assignBoardDisplay(targetData['row'], targetData['column'], currentTurn.getSymbol());
+            Board.subtractCounter();
             Board.checkWin(currentTurn);
             disableBox(target);
             currentTurn = playerTwo;
@@ -161,6 +176,7 @@ const Game = (() => {
         } else if (currentTurn === playerTwo) {
             Board.assignBoardValue(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.assignBoardDisplay(targetData['row'], targetData['column'], currentTurn.getSymbol());
+            Board.subtractCounter();
             Board.checkWin(currentTurn);
             disableBox(target);
             currentTurn = playerOne;
@@ -168,6 +184,7 @@ const Game = (() => {
         } else {
             Board.assignBoardValue(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.assignBoardDisplay(targetData['row'], targetData['column'], currentTurn.getSymbol());
+            Board.subtractCounter();
             Board.checkWin(currentTurn);
             disableBox(target);
             currentTurn = playerTwo;
