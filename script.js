@@ -79,7 +79,9 @@ const Board = (() => {
         winCombination["vertical-0"] || winCombination["vertical-1"] || winCombination["vertical-2"] ||
         winCombination["diagonal-1"] || winCombination["diagonal-2"]) {
             console.log(`${player.getName()} Win!`);
+            Game.updateTurnSign(`${player.getName()} Win!`);
             Game.removeBoxesListener(); //Disable all boxes
+            return true;
 
         } else if (emptyCounter === 0) {
             console.log('It is a draw');
@@ -114,7 +116,7 @@ const Game = (() => {
     let currentTurn = 'none';
 
     const turnSign = document.querySelector('.turn');
-    const updateTurnSign = (player) => turnSign.innerText = player.getName();
+    const updateTurnSign = (text) => turnSign.innerText = text;
 
     const resetButton = document.querySelector('button');
     resetButton.addEventListener('click', resetClick);
@@ -123,7 +125,7 @@ const Game = (() => {
         if (currentTurn === 'none') {
             console.log('first player Start!');
             currentTurn = playerOne;
-            updateTurnSign(currentTurn);
+            updateTurnSign(currentTurn.getName());    
         } else {
             console.log('RESET: first player Start!');
             currentTurn = playerOne;
@@ -169,57 +171,40 @@ const Game = (() => {
             Board.assignBoardValue(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.assignBoardDisplay(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.subtractCounter();
-            Board.checkWin(currentTurn);
+            if (Board.checkWin(currentTurn) === true) {
+                return;
+            }
+            // Board.checkWin(currentTurn);
             disableBox(target);
             currentTurn = playerTwo;
-            updateTurnSign(currentTurn);
+            updateTurnSign(currentTurn.getName());
         } else if (currentTurn === playerTwo) {
             Board.assignBoardValue(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.assignBoardDisplay(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.subtractCounter();
-            Board.checkWin(currentTurn);
+            if (Board.checkWin(currentTurn) === true) {
+                return;
+            }
+            // Board.checkWin(currentTurn);
             disableBox(target);
             currentTurn = playerOne;
-            updateTurnSign(currentTurn);
+            updateTurnSign(currentTurn.getName());
         } else {
             Board.assignBoardValue(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.assignBoardDisplay(targetData['row'], targetData['column'], currentTurn.getSymbol());
             Board.subtractCounter();
-            Board.checkWin(currentTurn);
+            if (Board.checkWin(currentTurn) === true) {
+                return;
+            }
+            // Board.checkWin(currentTurn);
             disableBox(target);
             currentTurn = playerTwo;
-            updateTurnSign(currentTurn);
+            updateTurnSign(currentTurn.getName());
         }
     }
 
     return {
-        removeBoxesListener
+        removeBoxesListener, updateTurnSign,
     };
 
 })();
-
-
-// Testing
-
-// const testConstrutor = function () {
-//     this.hello = () => console.log('hello');
-//     this.hi = "Hi";
-//     this.button = () => document.querySelector('button');
-// }
-
-// const test = new testConstrutor();
-
-// const foo = (() => {
-//     let count = 0;
-    
-//     const addCount = () => count += 1
-//     const getCount = () => count
-
-//     // if (count > 3) {
-//     //     count = 0;
-//     // }
-
-//     return {
-//         count, getCount, addCount
-//     }
-// })();
